@@ -27,17 +27,6 @@ pub fn autobalance_parens(input: &str) -> Result<String, CalcError> {
     }
 }
 
-fn thousand_sep(mut s: String) -> String {
-    let inc = 3;
-    let mut end = s.find('.').unwrap();
-    let sign = if s.starts_with('-') { 1 } else { 0 };
-    for _ in 0..(end - sign - 1) / inc {
-        end -= inc;
-        s.insert(end, ',');
-    }
-    s
-}
-
 pub fn pprint(mut ans: f64) {
     if ans.is_infinite() {
         println!("{}inf", if ans.is_sign_positive() { "" } else { "-" });
@@ -46,7 +35,7 @@ pub fn pprint(mut ans: f64) {
     } else if CONFIGURATION.base == 10 {
         // use standard library formatter since it handle printing pretty well
         let ans = format!("{:.*}", CONFIGURATION.fix, ans);
-        println!("{}", thousand_sep(ans));
+        println!("{}", ans);
     } else {
         ans = format!("{:.*}", CONFIGURATION.fix, ans).parse().unwrap();
         let table: &[u8] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".as_bytes();
@@ -81,6 +70,6 @@ pub fn pprint(mut ans: f64) {
             fract = fract.fract();
         }
         let ans = format!("{:>10}.{}", obase_int, obase_fract);
-        println!("{}", thousand_sep(ans));
+        println!("{}", ans);
     }
 }
